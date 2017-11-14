@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div class="box">
+        <sapn calss="box1">河南{{name}}北京{{age}}</sapn>
+    </div>
+    <script>
+        class Vue {
+            constructor(obj){
+                this.dom = document.querySelector(obj.el)
+                console.log(this.dom)
+                this.data = obj.data
+                this.renderDom(this.dom)    
+            }
+            render(node){
+                let sTag = '{{'
+                let eTag = '}}'
+                let matchs = node.textContent.split(sTag)
+                console.log(matchs)
+                if(matchs.length){
+                    let val = ''
+                    for(let i = 0; i < matchs.length; i++){
+                        let match = matchs[i].split(eTag)
+                        console.log(match)
+                        if(match.length==1){
+                            val = val + matchs[i]
+                            console.log(val)
+                        }else{
+                            if(match[1]==''){
+                                val = val + this.data[match[0]]
+                                console.log(val)
+                            }else{
+                                val = val + this.data[match[0]] + match[1]
+                                console.log(val)
+                            }
+                            
+                        }
+                    }
+                    node.textContent = val
+                }
+            }
+            renderDom(dom){
+                let that = this
+                let nodes = dom.childNodes
+                // let attrs = dom.attributes
+                // console.log(attrs[0].textContent)
+                Array.prototype.forEach.call(nodes,(item)=>{
+                    if(item.nodeType === 1){
+                        return that.renderDom(item)
+                    }
+                    that.render(item)
+                })
+            }
+
+
+        }
+
+        let app =new Vue({
+            el: '.box',
+            data: {
+                name: '熊林涛',
+                age:'22'
+            }
+        })
+    </script>
+</body>
+</html>

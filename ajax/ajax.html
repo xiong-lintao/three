@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    #app {
+        width: 100px;
+        height: 100px;
+        /* background-color: pink; */
+    }
+</style>
+<body>
+    <div id="app">
+
+    </div>
+    <script>
+        let xiong = {
+            getId:function(id){
+                return document.getElementById(id)
+            },
+            ajax:function(obj,callback){
+                let xhr = new XMLHttpRequest()
+                if(obj.method == 'GET'){
+                    let data = ''
+                    for(let item in obj.data){
+                        data = data&item + '=' + obj.data[item]
+                    }
+                    xhr.open('GET',obj.url + '?' + data)
+                    xhr.send(null)
+                }else if(obj.method == 'POST'){
+                    xhr.open('POST',obj.url)
+                    xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded")
+                    let data = ''
+                    for(let item in obj.data){
+                        data = data&item + '=' + obj.data[item]
+                    }
+                    xhr.send(data)
+                }
+                xhr.onreadystatechange = function(){
+                    if(xhr.readyState == 4){
+                        if(xhr.status >= 200&&xhr.status <300||xhr.status==304){
+                            callback(xhr.responseText)
+                        }
+                    }
+                }
+            }
+        }
+        xiong.ajax({
+            method:"GET",
+            url:'data/data1.json'
+        },function(data){
+            console.log(data)
+        })
+    </script>
+</body>
+</html>
